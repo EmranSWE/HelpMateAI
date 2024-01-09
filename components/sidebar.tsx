@@ -15,6 +15,7 @@ import {
   VideoIcon,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { FreeCounter } from "./free-counter";
 const routes = [
   {
     label: "Dashboard",
@@ -55,10 +56,15 @@ const routes = [
   {
     label: "Settings",
     icon: Settings,
-    href: "/setting",
+    href: "/settings",
   },
 ];
-const Sidebar = () => {
+
+type SidebarProps = {
+  apiLimitCount: number;
+  isPro: boolean;
+};
+const Sidebar = ({ apiLimitCount = 0, isPro = false }: SidebarProps) => {
   const pathName = usePathname();
   return (
     <div className="space-y-4 py-4 flex flex-col h-full bg-[#111828] text-white">
@@ -91,6 +97,7 @@ const Sidebar = () => {
           ))}
         </div>
       </div>
+      <FreeCounter isPro={isPro} apiLimitCount={apiLimitCount} />
     </div>
   );
 };
