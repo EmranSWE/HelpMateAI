@@ -66,6 +66,16 @@
   }
 }
 
+.text-gradient {
+  background: linear-gradient(
+    to right,
+    hsl(var(--destructive)),
+    hsl(var(--destructive-foreground))
+  );
+  -webkit-background-clip: text; /* For Safari */
+  color: transparent;
+  display: inline-block; /* Needed for Safari */
+}
 @layer base {
   * {
     @apply border-border;

@@ -2,7 +2,7 @@
 import { Montserrat } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 const montserrat = Montserrat({ weight: "700", subsets: ["latin"] });
 import { cn } from "@/lib/utils";
 import {
@@ -66,15 +66,26 @@ type SidebarProps = {
 };
 const Sidebar = ({ apiLimitCount = 0, isPro = false }: SidebarProps) => {
   const pathName = usePathname();
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) {
+    return null;
+  }
   return (
     <div className="space-y-4 py-4 flex flex-col h-full bg-[#111828] text-white">
       <div className="px-3 py-2 flex-1">
         <Link href="/dashboard" className="flex items-center pl-3 mb-14">
           <div className="relative w-8 h-8 mr-4">
             {/* <Image fill alt="logo" src=""></Image> */}
-            <h1 className={cn("text-2xl font-bold", montserrat.className)}>
-              HelpMate
-            </h1>
+
+            <Link href="/">
+              <h1 className={cn("text-2xl font-bold", montserrat.className)}>
+                HelpMate
+              </h1>
+            </Link>
           </div>
         </Link>
         <div className="space-y-1">
