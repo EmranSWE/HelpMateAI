@@ -2,8 +2,8 @@
 ![HelpMateAI Banner](header.png)
 HelpMateAI is a versatile SaaS (Software as a Service) project that integrates powerful AI capabilities to enhance various aspects of user interaction and learning. The project focuses on conversing with AI, learning English with AI assistance, generating images, videos, and audio content etc.
 
-# HelpMateAI project [Link](https://helpmateai.vercel.app/)
-https://helpmateai.vercel.app/
+#### HelpMateAI project [Link](https://helpmateai.vercel.app/)
+
 
 # Project Video
 [Watch the video here](https://vimeo.com/902016305)
