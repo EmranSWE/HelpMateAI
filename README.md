@@ -2,6 +2,8 @@
 ![HelpMateAI Banner](header.png)
 HelpMateAI is a versatile SaaS (Software as a Service) project that integrates powerful AI capabilities to enhance various aspects of user interaction and learning. The project focuses on conversing with AI, learning English with AI assistance, generating images, videos, and audio content etc.
 
+<div style="padding:56.25% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/902016305?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="HelpmateAI"></iframe></div>
+
 ## Features
 
 ### 1. Conversation With AI
