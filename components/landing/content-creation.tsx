@@ -4,9 +4,13 @@ import Image from "next/image";
 import ImagePrompt from "../../assets/image-prompt.png";
 import Link from "next/link";
 import VideoPlayer from "./video-payer";
+import VimeoVideo from "../video-player";
+import ProjectVideoPlayer from "../video-player";
 const ContentCreation = () => {
   return (
     <>
+      {/* ProjectsVideo */}
+
       <div className="text-white flex flex-col lg:flex-row">
         <div className="lg:w-1/2 p-8">
           <h1 className="text-4xl font-bold mb-4 text-gradient">
@@ -60,6 +64,13 @@ const ContentCreation = () => {
             </Button>
           </Link>
         </div>
+      </div>
+      {/* Video */}
+      <div className="text-center my-2">
+        <h1 className="text-4xl font-bold mb-4 text-gradient">
+          Project Overview
+        </h1>
+        <ProjectVideoPlayer />
       </div>
     </>
   );
