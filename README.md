@@ -22,6 +22,13 @@ Need custom audio content? Our AI-driven Audio Generation feature allows you to 
 ### 6. Code Generation
 Empower your development process with our Code Generation feature. Quickly generate code snippets for common tasks, prototypes, or boilerplate code, saving time and effort in your coding endeavors.
 
+### Overview
+![Full_image](full.png)
+
+
+### Dashboard
+![Dashboard_image](dashboard.png)
+
 ## Free Trial and Premium Features
 
 Experience HelpMateAI with our free trial, offering 5 credits to explore the platform's capabilities. After the trial period, users can choose to upgrade to our premium service to unlock unlimited access to all features.
