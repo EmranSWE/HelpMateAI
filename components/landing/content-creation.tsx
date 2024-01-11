@@ -2,13 +2,13 @@ import React from "react";
 import { Button } from "../ui/button";
 import Image from "next/image";
 import ImagePrompt from "../../assets/image-prompt.png";
-import VideoPrompt from "../../assets/video.png";
 import Link from "next/link";
+import VideoPlayer from "./video-payer";
 const ContentCreation = () => {
   return (
     <>
-      <div className="text-white flex">
-        <div className="w-1/2 p-8">
+      <div className="text-white flex flex-col lg:flex-row">
+        <div className="lg:w-1/2 p-8">
           <h1 className="text-4xl font-bold mb-4 text-gradient">
             Content Creation
           </h1>
@@ -25,7 +25,7 @@ const ContentCreation = () => {
             </Button>
           </Link>
         </div>
-        <div>
+        <div className="lg:w-1/2">
           <Image
             src={ImagePrompt}
             alt="image"
@@ -37,17 +37,11 @@ const ContentCreation = () => {
         </div>
       </div>
 
-      <div className="text-white flex items-center">
-        <div>
-          <Image
-            src={VideoPrompt}
-            alt="image"
-            width={500}
-            height={300}
-            className="rounded"
-          />
+      <div className="text-white flex flex-col lg:flex-row items-center">
+        <div className="lg:w-1/2">
+          <VideoPlayer />
         </div>
-        <div className="w-1/2 p-8 text-center">
+        <div className="lg:w-1/2 p-8 text-center">
           <h1 className="text-4xl font-bold mb-4 text-gradient">
             Video Generation
           </h1>

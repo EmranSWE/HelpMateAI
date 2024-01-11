@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import {
   Code,
   ImageIcon,
+  Languages,
   LayoutDashboard,
   MessageSquare,
   Music,
@@ -28,6 +29,12 @@ const routes = [
     icon: MessageSquare,
     href: "/conversation",
     color: "text-sky-500",
+  },
+  {
+    label: "Learn English",
+    icon: Languages,
+    href: "/english",
+    color: "text-lime-500",
   },
   {
     label: "Image Generation",

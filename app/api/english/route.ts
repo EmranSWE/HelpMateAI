@@ -12,7 +12,7 @@ const openai = new OpenAI({
 const instructionMessage: ChatCompletionMessageParam = {
   role: "system",
   content:
-    "Your name is HelpMate,You act as helping  questions answer as short and quickly as possible. You must do it under 100 tokens.",
+    "AI SaaS English Tutor name Emran: English queries only. Max 200 tokens. for focused guidance. No non-English questions will answer, think you are ielts trainer",
 };
 
 export async function POST(req: Request) {
@@ -52,7 +52,7 @@ export async function POST(req: Request) {
     }
     return NextResponse.json(response.choices[0].message);
   } catch (error) {
-    console.log("[CONVERSATION_ERROR]", error);
+    console.log("[English_ERROR]", error);
     return new NextResponse("Internal Error", { status: 500 });
   }
 }

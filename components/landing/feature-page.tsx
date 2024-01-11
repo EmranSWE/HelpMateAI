@@ -1,61 +1,65 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import Image from "next/image";
-import {
-  Code,
-  ImageIcon,
-  MessageCircle,
-  MessageSquare,
-  Star,
-  Video,
-} from "lucide-react";
-const testimonials = [
+import { Code, ImageIcon, MessageSquare, Video } from "lucide-react";
+import { cn } from "@/lib/utils";
+const feature = [
   {
     name: "Conversation  ",
-    avatar: <MessageSquare />,
-    color: "red",
+    avatar: MessageSquare,
+    color: "text-violet-500",
     bgColor: "green",
-    review: 5,
     title: "Advanced AI model",
     description:
-      "HelpMateAI is pure magic for content creators! From visuals to code, it transforms workflows, sparks creativity, and elevates every project. A true game-changer in content creation!",
+      "Elevate conversations effortlessly with HelpMateAi, your go-to AI SaaS solution. Revolutionize communication and enhance engagement with cutting-edge technology.",
   },
   {
     name: "Code Generation",
-    avatar: <Code />,
-    review: 5,
+    avatar: Code,
+    color: "text-green-500",
     title: "Advanced AI model",
     description:
-      "HelpMateAI is a game-changer! Unmatched in versatility, it's transformed our creative process. From image and video to audio and code, it's a must-have for anyone looking to elevate their projects. ",
+      "Turbocharge your coding process with CodeGenAI – the future of code generation. Streamline development tasks and unlock unprecedented efficiency with our advanced AI-driven solution ",
   },
   {
     name: "Image Generation",
-    avatar: <ImageIcon />,
-    review: 5,
+    avatar: ImageIcon,
+    color: "text-pink-500",
     title: "Advanced AI model",
     description:
-      "HelpMateAI is my content creation secret weapon. From images to code, it streamlines everything. Efficient, creative, and indispensable for any content marketer!",
+      "Unleash visual creativity with ImageGenAI, harnessing the power of our advanced AI for seamless and stunning image generation. Redefine possibilities, effortlessly create with precision.",
   },
   {
     name: "Video",
-    avatar: <Video />,
-    review: 5,
+    avatar: Video,
+    color: "text-blue-500",
     title: "Advanced AI model",
     description:
-      "HelpMateAI is my go-to for content magic. From visuals to code, it's a game-changer. Simplifies my workflow, sparks creativity, and elevates every project. A must for content creators!",
+      "Revolutionize content creation with VidGenAI. Our advanced AI transforms ideas into captivating videos, making creativity as simple as a click",
   },
 ];
+
 const FeaturePage = () => {
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) {
+    return null;
+  }
   return (
     <div>
       <div className="px-10 pb-20">
         <div className="text-center">
-          <h1 className="text-4xl font-extrabold mb-10  text-gradient">
-            Features
-          </h1>
+          <h1 className="text-4xl font-extrabold   text-gradient">Features</h1>
+          <p className="text-center mb-10 text-white">
+            Transform Your Vision into Reality with the Power of Our Advanced AI
+            Model
+          </p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
-          {testimonials.map((item) => (
+          {feature.map((item) => (
             <Card
               key={item.description}
               className="bg-[#192339] border-none text-white"
@@ -63,11 +67,16 @@ const FeaturePage = () => {
               <CardHeader>
                 <CardTitle className="flex items-center gap-x-2">
                   <div>
-                    <div className="w-44">{item.avatar}</div>
+                    <div className="flex items-center flex-1">
+                      <div className={cn("p-2 w-fit rounded-md", item.bgColor)}>
+                        <item.avatar className={cn("w-10 h-10", item.color)} />
+                      </div>
+                      {item.name}
+                    </div>
+
                     <div>
                       <p className="text-zinc-400 text-sm">
-                        <p className="text-lg">{item.name}</p>
-                        {item.title}
+                        <p className="text-lg">{item.title}</p>
                       </p>
                     </div>
                   </div>
