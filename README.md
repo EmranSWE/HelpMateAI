@@ -4,7 +4,7 @@ HelpMateAI is a versatile SaaS (Software as a Service) project that integrates p
 
 
 # Project Video
-[![Video]([video](https://vimeo.com/902016305?share=copy))
+[Watch the video here](https://vimeo.com/902016305)
 ## Features
 
 ### 1. Conversation With AI
