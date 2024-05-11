@@ -4,6 +4,7 @@ import Heading from "@/components/heading";
 import { MessageSquare } from "lucide-react";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import ReactMarkdown from "react-markdown";
 import { formSchema } from "./constants";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
@@ -12,7 +13,6 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { ChatCompletionMessage } from "openai/resources/index.mjs";
-import OpenAI from "openai";
 import Empty from "@/components/empty";
 import Loader from "@/components/loader";
 import { cn } from "@/lib/utils";
@@ -36,17 +36,17 @@ const Conversation = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const userMessage: OpenAI.Chat.CreateChatCompletionRequestMessage = {
+      const userMessage = {
         role: "user",
         content: values.prompt,
       };
 
       const newMessages = [...messages, userMessage];
-
       const response = await axios.post("/api/conversation", {
         messages: newMessages,
       });
 
+      console.log(response.data)
       setMessages((current) => [...current, userMessage, response.data]);
 
       form.reset();
@@ -60,6 +60,7 @@ const Conversation = () => {
       router.refresh();
     }
   };
+
 
   return (
     <div>
@@ -140,7 +141,25 @@ const Conversation = () => {
                   ) : (
                     <UserAvatar></UserAvatar>
                   )}
-                  <p className="text-sm">{message.content}</p>
+                  <ReactMarkdown
+                    components={{
+                      pre: ({ node, ...props }) => (
+                        <div className="overflow-auto w-full my-2 bg-black/10 p-2 rounded-lg">
+                          <pre {...props} />
+                        </div>
+                      ),
+                      code: ({ node, ...props }) => (
+                        <code
+                          className="bg-black/10 rounded-lg p-1"
+                          {...props}
+                        />
+                      ),
+                    }}
+                    className="text-sm overflow-hidden leading-8"
+                  >
+                    {message.content || ""}
+                  </ReactMarkdown>
+                  
                 </div>
               ))}
             </div>

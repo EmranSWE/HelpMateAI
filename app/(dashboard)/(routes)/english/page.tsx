@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { ChatCompletionMessage } from "openai/resources/index.mjs";
 import OpenAI from "openai";
+import ReactMarkdown from "react-markdown";
 import Empty from "@/components/empty";
 import Loader from "@/components/loader";
 import { cn } from "@/lib/utils";
@@ -124,7 +125,7 @@ const English = () => {
                 <Empty label="No conversation started" />
               </div>
             )}
-            <div className="flex flex-col-reverse gap-y-4">
+              <div className="flex flex-col-reverse gap-y-4">
               {messages.map((message) => (
                 <div
                   key={message.content}
@@ -140,7 +141,25 @@ const English = () => {
                   ) : (
                     <UserAvatar></UserAvatar>
                   )}
-                  <p className="text-sm">{message.content}</p>
+                  <ReactMarkdown
+                    components={{
+                      pre: ({ node, ...props }) => (
+                        <div className="overflow-auto w-full my-2 bg-black/10 p-2 rounded-lg">
+                          <pre {...props} />
+                        </div>
+                      ),
+                      code: ({ node, ...props }) => (
+                        <code
+                          className="bg-black/10 rounded-lg p-1"
+                          {...props}
+                        />
+                      ),
+                    }}
+                    className="text-sm overflow-hidden leading-8"
+                  >
+                    {message.content || ""}
+                  </ReactMarkdown>
+                  
                 </div>
               ))}
             </div>
