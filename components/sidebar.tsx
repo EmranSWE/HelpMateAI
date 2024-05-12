@@ -14,6 +14,7 @@ import {
   Music,
   Settings,
   VideoIcon,
+  ImagePlus
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { FreeCounter } from "./free-counter";
@@ -37,11 +38,17 @@ const routes = [
     color: "text-lime-500",
   },
   {
-    label: "Image Generation",
-    icon: ImageIcon,
-    href: "/image",
-    color: "text-purple-500",
+    label: "Image Analysis",
+    icon: ImagePlus,
+    href: "/analysis",
+    color: "text-cyan-300",
   },
+  // {
+  //   label: "Image Generation",
+  //   icon: ImageIcon,
+  //   href: "/image",
+  //   color: "text-purple-500",
+  // },
   {
     label: "Video Generation",
     icon: VideoIcon,

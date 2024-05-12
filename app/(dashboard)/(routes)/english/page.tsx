@@ -1,7 +1,7 @@
 "use client";
 import * as z from "zod";
 import Heading from "@/components/heading";
-import { LanguagesIcon, MessageSquare } from "lucide-react";
+import { LanguagesIcon } from "lucide-react";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { formSchema } from "./constants";
@@ -11,8 +11,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import { ChatCompletionMessage } from "openai/resources/index.mjs";
-import OpenAI from "openai";
 import ReactMarkdown from "react-markdown";
 import Empty from "@/components/empty";
 import Loader from "@/components/loader";
@@ -21,10 +19,15 @@ import UserAvatar from "@/components/user-avater";
 import BotAvatar from "@/components/bot-avatar";
 import { useProModal } from "@/hooks/use-pro-modal";
 import toast from "react-hot-toast";
+
+interface Message {
+  role: string;
+  parts: any;
+}
 const English = () => {
   const proModal = useProModal();
   const router = useRouter();
-  const [messages, setMessages] = useState<ChatCompletionMessage[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -37,19 +40,16 @@ const English = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const userMessage: OpenAI.Chat.CreateChatCompletionRequestMessage = {
-        role: "user",
-        content: values.prompt,
-      };
-
-      const newMessages = [...messages, userMessage];
-
       const response = await axios.post("/api/english", {
-        messages: newMessages,
+        history:messages,
+        messages: [{ text: values.prompt }],
       });
 
-      setMessages((current) => [...current, userMessage, response.data]);
-
+      setMessages((currentMessages) => [
+        ...currentMessages,
+        { role: "user", parts: [{ text: values.prompt }] },
+        { role: "model", parts: [{ text: response.data }] },
+      ]);
       form.reset();
     } catch (error: any) {
       if (error?.response?.status === 403) {
@@ -125,10 +125,10 @@ const English = () => {
                 <Empty label="No conversation started" />
               </div>
             )}
-              <div className="flex flex-col-reverse gap-y-4">
+            <div className="flex flex-col-reverse gap-y-4">
               {messages.map((message) => (
                 <div
-                  key={message.content}
+                  key={message.parts}
                   className={cn(
                     "p-8 w-full flex items-start gap-x-8 rounded-lg",
                     message.role === "assistant"
@@ -136,7 +136,7 @@ const English = () => {
                       : " bg-white border border-black/10"
                   )}
                 >
-                  {message.role === "assistant" ? (
+                  {message.role === "model" ? (
                     <BotAvatar></BotAvatar>
                   ) : (
                     <UserAvatar></UserAvatar>
@@ -157,7 +157,7 @@ const English = () => {
                     }}
                     className="text-sm overflow-hidden leading-8"
                   >
-                    {message.content || ""}
+                    {message?.parts[0].text || ""}
                   </ReactMarkdown>
                   
                 </div>

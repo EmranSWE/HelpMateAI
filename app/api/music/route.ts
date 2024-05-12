@@ -9,11 +9,6 @@ const replicate = new Replicate({
   auth: process.env.REPLICATE_API_TOKEN!,
 });
 
-const instructionMessage: ChatCompletionMessageParam = {
-  role: "system",
-  content:
-    "Answer questions as short and quickly as possible. You must do it under 100 tokens.",
-};
 
 export async function POST(req: Request) {
   try {

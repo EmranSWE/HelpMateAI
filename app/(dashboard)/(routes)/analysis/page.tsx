@@ -1,7 +1,7 @@
 "use client";
 import * as z from "zod";
 import Heading from "@/components/heading";
-import { MessageSquare } from "lucide-react";
+import { ImagePlusIcon, MessageSquare } from "lucide-react";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import ReactMarkdown from "react-markdown";
@@ -12,7 +12,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import { ChatCompletionMessage } from "openai/resources/index.mjs";
 import Empty from "@/components/empty";
 import Loader from "@/components/loader";
 import { cn } from "@/lib/utils";
@@ -20,6 +19,7 @@ import UserAvatar from "@/components/user-avater";
 import BotAvatar from "@/components/bot-avatar";
 import { useProModal } from "@/hooks/use-pro-modal";
 import toast from "react-hot-toast";
+import ImageUploader from "@/components/image-uploader";
 interface Message {
   role: string;
   parts: any;
@@ -29,7 +29,8 @@ const Conversation = () => {
   const router = useRouter();
   // Initialize messages state with an empty array
   const [messages, setMessages] = useState<Message[]>([]);
-
+const [imageUrl,setImageUrl]=useState("")
+const [error, setError] = useState<string | null>(null);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -38,11 +39,22 @@ const Conversation = () => {
   });
 
   const isLoading = form.formState.isSubmitting;
+  const handleUploadSuccess = (imageLink:any) => {
+    setImageUrl(imageLink)
+  };
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const handleUploadError = (errorMessage:any) => {
+    setError(errorMessage)
+  };
+
+  const onSubmit = async (values: any) => {
     try {
-      const response = await axios.post("/api/conversation", {
-        history:messages,
+      if (!imageUrl) {
+        toast.error("Please provide an image and prompt message.");
+        return;
+    }
+      const response = await axios.post("/api/analysis", {
+        images:imageUrl,
         // messages: values.prompt,
         messages: [{ text: values.prompt }],
       });
@@ -63,18 +75,20 @@ const Conversation = () => {
       router.refresh();
     }
   };
-
+ 
   return (
     <div>
       <Heading
-        title="Conversation"
+        title="Image Analysis"
         description="Our Most Advanced Model"
-        icon={MessageSquare}
-        iconColor="text-violet-500"
-        bgColor="bg-violet-500/10"
+        icon={ImagePlusIcon}
+        iconColor="text-cyan-400"
+        bgColor="bg-cyan-500/10"
       />
       <div className="px-4 lg:px-8">
         <div>
+        <section className="flex gap-5">
+        <ImageUploader onUploadSuccess={handleUploadSuccess} onUploadError={handleUploadError} />
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
@@ -99,7 +113,7 @@ const Conversation = () => {
                       <Input
                         className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent"
                         disabled={isLoading}
-                        placeholder="How do I calculate the celsius?"
+                        placeholder="Describe the image with detail analysis?"
                         {...field}
                       />
                     </FormControl>
@@ -116,6 +130,7 @@ const Conversation = () => {
               </Button>
             </form>
           </Form>
+        </section>
           <div className="space-y-4 mt-4">
             {isLoading && (
               <div className="p-8 rounded-lg w-full flex items-center justify-center bg-muted">

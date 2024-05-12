@@ -21,10 +21,14 @@ import UserAvatar from "@/components/user-avater";
 import BotAvatar from "@/components/bot-avatar";
 import { useProModal } from "@/hooks/use-pro-modal";
 import toast from "react-hot-toast";
+interface Message {
+  role: string;
+  parts: any;
+}
 const CodePage = () => {
   const proModal = useProModal();
   const router = useRouter();
-  const [messages, setMessages] = useState<ChatCompletionMessage[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -37,19 +41,16 @@ const CodePage = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const userMessage: OpenAI.Chat.CreateChatCompletionRequestMessage = {
-        role: "user",
-        content: values.prompt,
-      };
-
-      const newMessages = [...messages, userMessage];
-
       const response = await axios.post("/api/code", {
-        messages: newMessages,
+        history:messages,
+        messages: [{ text: values.prompt }],
       });
-
-      setMessages((current) => [...current, userMessage, response.data]);
-
+      // Update messages state with the new message and response
+      setMessages((currentMessages) => [
+        ...currentMessages,
+        { role: "user", parts: [{ text: values.prompt }] },
+        { role: "model", parts: [{ text: response.data }]},
+      ]);
       form.reset();
     } catch (error: any) {
       if (error?.response?.status === 403) {
@@ -125,10 +126,10 @@ const CodePage = () => {
                 <Empty label="No conversation started" />
               </div>
             )}
-            <div className="flex flex-col-reverse gap-y-4">
+             <div className="flex flex-col-reverse gap-y-4">
               {messages.map((message) => (
                 <div
-                  key={message.content}
+                  key={message.parts}
                   className={cn(
                     "p-8 w-full flex items-start gap-x-8 rounded-lg",
                     message.role === "assistant"
@@ -136,7 +137,7 @@ const CodePage = () => {
                       : " bg-white border border-black/10"
                   )}
                 >
-                  {message.role === "assistant" ? (
+                  {message.role === "model" ? (
                     <BotAvatar></BotAvatar>
                   ) : (
                     <UserAvatar></UserAvatar>
@@ -157,8 +158,9 @@ const CodePage = () => {
                     }}
                     className="text-sm overflow-hidden leading-8"
                   >
-                    {message.content || ""}
+                    {message?.parts[0].text || ""}
                   </ReactMarkdown>
+                  
                 </div>
               ))}
             </div>

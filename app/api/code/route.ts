@@ -13,33 +13,37 @@ export async function POST(req: Request) {
   try {
     const { userId } = auth();
     const body = await req.json();
-    const { messages } = body;
-    const prompt = messages[messages?.length - 1]?.content;
+    const { messages,history } = body;
+    if (!userId) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
+    if (!messages) {
+      return new NextResponse("Messages are required", { status: 400 });
+    }
+    const freeTrial = await checkApiLimit();
+    const isPro = await checkSubscription();
+
+    if (!freeTrial && !isPro) {
+      return new NextResponse("Free trial has expired", { status: 403 });
+    }
+
     const model = genAI.getGenerativeModel({ model: "gemini-pro" });
     const chat = model.startChat({
-      history: [
-        {
-          role: "user",
-          parts: [{ text: prompt }],
-        },
-        {
-          role: "model",
-          parts: [{ text: "You are a code generator. You must answer only markdown code snippets. Use code comments for explanations." }],
-        },
-      ],
+      history: history,
       generationConfig: {
-        maxOutputTokens: 2000,
+        maxOutputTokens: 500,
       },
     });
 
-    const result = await chat.sendMessage(prompt);
+    const msg = messages[0].text;
+    const result = await chat.sendMessage(msg);
     const response = await result.response;
-    const text = response.text();
-    const responseData = {
-      role: "assistant",
-      content: text,
-    };
-    return NextResponse.json(responseData);
+    const text = await response.text();
+    if (!isPro) {
+      await incrementApiLimit();
+    }
+    return NextResponse.json(text);
   } catch (error) {
     console.log("[CODE_ERROR]", error);
     return new NextResponse("Internal Error", { status: 500 });
